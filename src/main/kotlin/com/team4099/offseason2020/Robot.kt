@@ -1,6 +1,5 @@
 package com.team4099.offseason2020
 
-import com.team4099.lib.around
 import com.team4099.lib.auto.AutoModeExecuter
 import com.team4099.lib.logging.CrashTracker
 import com.team4099.lib.logging.HelixEvents
@@ -8,7 +7,6 @@ import com.team4099.lib.logging.HelixLogger
 import com.team4099.lib.loop.Looper
 import com.team4099.offseason2020.auto.PathStore
 import com.team4099.offseason2020.config.Constants
-import com.team4099.offseason2020.config.ControlBoard
 import com.team4099.offseason2020.config.DashboardConfigurator
 import com.team4099.offseason2020.loops.FaultDetector
 import com.team4099.offseason2020.loops.VoltageEstimator
@@ -85,7 +83,7 @@ object Robot : TimedRobot() {
     override fun autonomousInit() {
         try {
             if (::autoModeExecuter.isInitialized) autoModeExecuter.stop()
-            Drive.zeroSensors()
+//            Drive.zeroSensors()
 
             disabledLooper.stop() // end DisabledLooper
             enabledLooper.start() // start EnabledLooper
@@ -131,9 +129,7 @@ object Robot : TimedRobot() {
     }
 
     override fun teleopPeriodic() {
-        try {
-
-        } catch (t: Throwable) {
+        try {} catch (t: Throwable) {
             CrashTracker.logThrowableCrash("teleopPeriodic", t)
             throw t
         }

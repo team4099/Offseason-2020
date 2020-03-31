@@ -4,6 +4,7 @@ import com.team4099.offseason2020.config.Constants
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward
 import edu.wpi.first.wpilibj.geometry.Pose2d
 import edu.wpi.first.wpilibj.geometry.Rotation2d
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics
 import edu.wpi.first.wpilibj.trajectory.Trajectory
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator
@@ -36,7 +37,7 @@ object PathStore {
                 Constants.Drive.Characterization.RIGHT_KA_REVERSE
             ).min() ?: 0.0
         ),
-        Drive.kinematics,
+        DifferentialDriveKinematics(0.0), // TODO: Change
         9.0
     )
 
@@ -48,7 +49,7 @@ object PathStore {
         Constants.Drive.MAX_VEL_METERS_PER_SEC,
         Constants.Drive.MAX_ACCEL_METERS_PER_SEC_SQ
     )
-        .setKinematics(Drive.kinematics)
+//        .setKinematics(Drive.kinematics)
         .addConstraint(voltageConstraint)
         .addConstraint(centripetalConstraint)
 
@@ -56,7 +57,7 @@ object PathStore {
         Constants.Drive.SLOW_VEL_METERS_PER_SEC,
         Constants.Drive.SLOW_ACCEL_METERS_PER_SEC_SQ
     )
-        .setKinematics(Drive.kinematics)
+//        .setKinematics(Drive.kinematics)
         .addConstraint(voltageConstraint)
         .addConstraint(centripetalConstraint)
 
@@ -64,7 +65,7 @@ object PathStore {
         Constants.Drive.MAX_VEL_METERS_PER_SEC,
         Constants.Drive.MAX_ACCEL_METERS_PER_SEC_SQ
     )
-        .setKinematics(Drive.kinematics)
+//        .setKinematics(Drive.kinematics)
         .setReversed(true)
         .addConstraint(voltageConstraint)
 
@@ -72,7 +73,7 @@ object PathStore {
         Constants.Drive.SLOW_VEL_METERS_PER_SEC,
         Constants.Drive.SLOW_ACCEL_METERS_PER_SEC_SQ
     )
-        .setKinematics(Drive.kinematics)
+//        .setKinematics(Drive.kinematics)
         .setReversed(true)
         .addConstraint(voltageConstraint)
 

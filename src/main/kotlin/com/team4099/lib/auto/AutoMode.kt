@@ -1,7 +1,6 @@
 package com.team4099.lib.auto
 
 import com.team4099.lib.logging.HelixEvents
-import com.team4099.offseason2020.auto.actions.WaitAction
 import edu.wpi.first.wpilibj.Timer
 
 /**

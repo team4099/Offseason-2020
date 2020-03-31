@@ -28,7 +28,7 @@ data class Translation3d(val x: Double, val y: Double, val z: Double) {
         return Translation3d(x - other.x, y - other.y, z - other.z)
     }
 
-    operator fun times(scalar: Double) : Translation3d {
+    operator fun times(scalar: Double): Translation3d {
         return Translation3d(x * scalar, y * scalar, z * scalar)
     }
 

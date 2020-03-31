@@ -5,13 +5,7 @@ import com.team4099.lib.auto.AutoModeProvider
 import com.team4099.lib.logging.HelixEvents
 import com.team4099.lib.loop.Loop
 import com.team4099.lib.subsystem.ServoMotorSubsystem
-import com.team4099.offseason2020.auto.modes.DriveCharacterizeMode
-import com.team4099.offseason2020.auto.modes.DriveForwardMode
-import com.team4099.offseason2020.auto.modes.EightBallMode
-import com.team4099.offseason2020.auto.modes.FarTrenchFiveBallMode
-import com.team4099.offseason2020.auto.modes.FarTrenchSevenBallMode
-import com.team4099.offseason2020.auto.modes.Shoot3Mode
-import com.team4099.offseason2020.auto.modes.SixBallMode
+import com.team4099.offseason2020.auto.modes.DoNothingMode
 import edu.wpi.first.cameraserver.CameraServer
 import edu.wpi.first.networktables.NetworkTableEntry
 import edu.wpi.first.wpilibj.DriverStation
@@ -22,7 +16,7 @@ import kotlin.math.roundToInt
 /**
  * Controls the interactive elements of SmartDashboard.
  *
- * Keeps the network tables keys in one spot and enforces autonomous mode
+ * Keeps the network tables keys in one spot =nd enforces autonomous mode
  * invariants.
  */
 object DashboardConfigurator : Loop {
@@ -36,19 +30,13 @@ object DashboardConfigurator : Loop {
     }
 
     private val defaultStart = StartingPosition.INIT_LINE
-    private val defaultMode = { _: StartingPosition, _: Double -> Shoot3Mode(0.0) }
+    private val defaultMode = { _: StartingPosition, _: Double -> DoNothingMode() }
 
     /**
      * Maps the name of a mode to a function that creates an instance of it.
      */
     private val allModes = mapOf<String, AutoModeProvider>(
-        Constants.Autonomous.DEFAULT_MODE_NAME to defaultMode,
-        "Drive Forward" to { _: StartingPosition, delay: Double -> DriveForwardMode(delay) },
-        "6 Ball" to { _: StartingPosition, delay: Double -> SixBallMode(delay) },
-        "8 Ball" to { _: StartingPosition, delay: Double -> EightBallMode(delay) },
-        "Far Trench 5 Ball" to { _: StartingPosition, delay: Double -> FarTrenchFiveBallMode(delay) },
-        "Far Trench 7 Ball" to { _: StartingPosition, delay: Double -> FarTrenchSevenBallMode(delay) },
-        "Drivetrain Characterization" to { _: StartingPosition, delay: Double -> DriveCharacterizeMode(delay) }
+        Constants.Autonomous.DEFAULT_MODE_NAME to defaultMode
     )
 
     private val configurableSubsystems = mutableListOf<ServoMotorSubsystem>()

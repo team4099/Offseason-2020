@@ -24,7 +24,7 @@ targetCompatibility = JavaVersion.VERSION_11
 
 def TEAM = 4099
 // do not change main class (does not run without it being Main
-def ROBOT_MAIN_CLASS = "com.team4099.robot2020.Main"
+def ROBOT_MAIN_CLASS = "com.team4099.offseason2020.Main"
 def includeDesktopSupport = true
 
 // Define my targets (RoboRIO) and artifacts (deployable files)

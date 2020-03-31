@@ -12,23 +12,23 @@ data class Pose3d(val x: Double, val y: Double, val z: Double, val yaw: Rotation
     val pose2d
         get() = Pose2d(translation.x, translation.y, yaw)
 
-    operator fun plus(other: Pose3d) : Pose3d {
+    operator fun plus(other: Pose3d): Pose3d {
         return Pose3d(translation + other.translation, yaw + other.yaw, pitch + other.pitch)
     }
 
-    operator fun minus(other: Pose3d) : Pose3d {
+    operator fun minus(other: Pose3d): Pose3d {
         return Pose3d(translation - other.translation, yaw - other.yaw, pitch - other.pitch)
     }
 
-    operator fun times(scalar: Double) : Pose3d {
+    operator fun times(scalar: Double): Pose3d {
         return Pose3d(translation * scalar, yaw, pitch)
     }
 
-    operator fun div(scalar: Double) : Pose3d {
+    operator fun div(scalar: Double): Pose3d {
         return Pose3d(translation / scalar, yaw, pitch)
     }
 
-    operator fun unaryMinus() : Pose3d {
+    operator fun unaryMinus(): Pose3d {
         return Pose3d(-translation, yaw + Rotation2d.fromDegrees(180.0), pitch + Rotation2d.fromDegrees(180.0))
     }
 }
