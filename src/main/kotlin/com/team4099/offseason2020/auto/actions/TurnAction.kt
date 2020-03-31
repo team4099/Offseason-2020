@@ -1,0 +1,39 @@
+package com.team4099.offseason2020.auto.actions
+
+import com.team4099.lib.auto.Action
+import com.team4099.lib.drive.DriveSignal
+import com.team4099.offseason2020.config.Constants
+import kotlin.math.abs
+import kotlin.math.sign
+
+class TurnAction(angleToTurn: Double, slowMode: Boolean) : Action {
+    private val direction = sign(angleToTurn)
+    private val angleToTurn = abs(angleToTurn)
+    private var power = Constants.Autonomous.TURN_POWER
+    private var startAngle = 0.0
+    private var done = false
+
+    private val turnSignal = DriveSignal(direction * power, -direction * power)
+
+    init {
+        if (slowMode) {
+            this.power = Constants.Autonomous.SLOW_TURN_POWER
+        }
+    }
+
+    override fun isFinished(timestamp: Double): Boolean {
+        return abs(Drive.angle - startAngle) >= angleToTurn || done
+    }
+
+    override fun onLoop(timestamp: Double, dT: Double) {
+        Drive.setOpenLoop(turnSignal)
+    }
+
+    override fun onStop(timestamp: Double) {
+        Drive.setOpenLoop(DriveSignal.NEUTRAL)
+    }
+
+    override fun onStart(timestamp: Double) {
+        startAngle = Drive.angle
+    }
+}
