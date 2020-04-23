@@ -5,17 +5,13 @@ import com.team4099.lib.motorcontroller.CTREMotorControllerFactory
 /**
  * The configuration of a [com.team4099.lib.subsystem.ServoMotorSubsystem]
  */
-open class ServoMotorSubsystemConfig(
-    val masterMotorControllerConfiguration: CTREMotorControllerFactory.Configuration,
+data class ServoMotorSubsystemConfig(
     val name: String,
     val unitsName: String,
     val positionPIDGains: PIDGains,
     val velocityPIDGains: PIDGains,
     val homePosition: Double,
     val motionConstraints: ServoMotorSubsystemMotionConstraints,
-    unitsPerEncoderRev: Double,
-    encoderResolution: Int,
+    val ticksPerUnitDistance: Double, // encoderResolution / unitsPerEncoderRev
     val brakeMode: Boolean = false
-) {
-    val ticksPerUnitDistance = encoderResolution / unitsPerEncoderRev
-}
+)

@@ -34,7 +34,7 @@ abstract class ServoMotorSubsystem(
      * The current position of the mechanism in units.
      */
     @get:Synchronized
-    val position: Double
+    internal val position: Double
         get() = ticksToHomedUnits(positionTicks)
 
     /**
@@ -42,14 +42,13 @@ abstract class ServoMotorSubsystem(
      * using motion profiling.
      */
     @set:Synchronized
-    var positionSetpointMotionProfile: Double = Double.NaN
+    internal var positionSetpointMotionProfile: Double = Double.NaN
         set(value) {
             if (!state.usesVelocityControl) {
                 state = ControlState.MOTION_MAGIC
                 enterVelocityClosedLoop()
             }
             field = constrainPositionUnits(value)
-            hardware.setMotionProfile(homeAwareUnitsToTicks(field).toDouble())
         }
 
     /**
@@ -57,14 +56,13 @@ abstract class ServoMotorSubsystem(
      * using position PID.
      */
     @set:Synchronized
-    var positionSetpointPositionPID: Double = Double.NaN
+    internal var positionSetpointPositionPID: Double = Double.NaN
         set(value) {
             if (!state.usesPositionControl) {
                 state = ControlState.POSITION_PID
                 enterPositionClosedLoop()
             }
             field = constrainPositionUnits(value)
-            hardware.setPosition(homeAwareUnitsToTicks(field).toDouble())
         }
 
     private val velocityTicksPer100Ms: Int
@@ -74,7 +72,7 @@ abstract class ServoMotorSubsystem(
      * The current velocity of the mechanism in units per second.
      */
     @get:Synchronized
-    val velocity: Double
+    internal val velocity: Double
         get() = ticksPer100msToUnitsPerSecond(velocityTicksPer100Ms)
 
     /**
@@ -82,24 +80,22 @@ abstract class ServoMotorSubsystem(
      * using velocity PID.
      */
     @set:Synchronized
-    var velocitySetpoint: Double = Double.NaN
+    internal var velocitySetpoint: Double = Double.NaN
         set(value) {
             if (!state.usesVelocityControl) {
                 state = ControlState.VELOCITY_PID
                 enterVelocityClosedLoop()
             }
             field = constrainVelocityUnitsPerSecond(value)
-            hardware.setVelocity(field)
         }
 
     /**
      * Open loop power in percentage output.
      */
     @set:Synchronized
-    var openLoopPower: Double = 0.0
+    internal var openLoopPower: Double = 0.0
         set(value) {
             if (state != ControlState.OPEN_LOOP) state = ControlState.OPEN_LOOP
-            hardware.setOpenLoop(value)
             field = value
         }
 
@@ -122,7 +118,18 @@ abstract class ServoMotorSubsystem(
         zeroSensors()
     }
 
-    override fun onLoop(timestamp: Double, dT: Double) {}
+    override fun onLoop(timestamp: Double, dT: Double) {
+        when (state) {
+            ControlState.MOTION_MAGIC ->
+                hardware.setMotionProfile(homeAwareUnitsToTicks(positionSetpointMotionProfile).toDouble())
+            ControlState.OPEN_LOOP ->
+                hardware.setOpenLoop(openLoopPower)
+            ControlState.POSITION_PID ->
+                hardware.setPosition(homeAwareUnitsToTicks(positionSetpointPositionPID).toDouble())
+            ControlState.VELOCITY_PID ->
+                hardware.setVelocity(velocitySetpoint)
+        }
+    }
 
     override fun onStop(timestamp: Double) {
         openLoopPower = 0.0
